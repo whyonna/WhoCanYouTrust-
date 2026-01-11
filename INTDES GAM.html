@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Missing Backpack Post - Story Setup</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body, html {
+  height: 100%;
+  background-color: #e3f5fd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Press Start 2P', cursive;
+}
+
+#container {
+  width: 960px;
+  height: 540px;
+  position: relative;
+  overflow: hidden;
+  background-color: #e3f5fd;
+  margin: 0 auto;
+}
+
+#container.intro-theme #story-text-box {
+  border-color: #8a4fa3;
+  box-shadow: 0 0 0 4px #5b2d6f;
+  background: linear-gradient(135deg, #f4ddf2 0%, #d6e6fb 100%);
+}
+
+#container.intro-theme #next-btn {
+  background-color: #8a4fa3;
+}
+
+#container.intro-theme #story-text {
+  color: #3a1b4f;
+}
+
+#container.intro-theme #play-again {
+  background-color: #8a4fa3;
+  border-color: #8a4fa3;
+  box-shadow: 0 0 0 2px #5b2d6f;
+  color: #fff;
+}
+
+#scaled-root {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1200px;
+  height: 675px;
+  transform: translate(-50%, -50%) scale(0.8);
+  transform-origin: center;
+}
+
+.intro-screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e3f5fd;
+  z-index: 8;
+}
+
+.intro-card {
+  width: 720px;
+  height: 420px;
+  background: linear-gradient(135deg, #f7d9ef 0%, #cfe9fb 100%);
+  border: 6px solid #8a4fa3;
+  box-shadow: 0 0 0 6px #5b2d6f;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: 24px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.intro-title {
+  font-size: 26px;
+  color: #5b2d6f;
+  margin: 0;
+  text-shadow: 0 2px 0 #fff;
+  opacity: 0;
+  animation: introFade 1.2s ease forwards;
+}
+
+.intro-middle {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.intro-subtitle {
+  font-size: 14px;
+  color: #6a3a7a;
+  margin-top: 10px;
+  margin-bottom: 12px;
+  line-height: 1.6;
+  opacity: 0;
+  animation: introSlide 0.9s ease 0.4s forwards;
+}
+
+.intro-icons {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 6px;
+  margin-top: 59px;
+  opacity: 0;
+  animation: introSlide 0.9s ease 0.2s forwards;
+}
+
+.intro-icons img {
+  width: 44px;
+  height: 44px;
+  image-rendering: pixelated;
+}
+
+.intro-burst {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(173, 102, 205, 0.2);
+  top: -30px;
+  left: -20px;
+}
+
+.intro-burst.right {
+  top: auto;
+  left: auto;
+  bottom: -40px;
+  right: -30px;
+  background: rgba(103, 56, 122, 0.2);
+}
+
+.intro-button {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+  padding: 12px 22px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 16px;
+  background: #f5e2f2;
+  border: 4px solid #8a4fa3;
+  box-shadow: 0 0 0 2px #5b2d6f;
+  color: #5b2d6f;
+  cursor: pointer;
+  margin-top: 31px;
+}
+
+.intro-content {
+  margin-top: 40px;
+}
+
+.intro-button.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@keyframes introFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes introSlide {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+.bg-audio {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#story-container {
+  width: 90%;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  opacity: 1;
+  transition: opacity 0.6s ease;
+  transform: translateY(35px);
+}
+
+/* IMAGE WRAPPER */
+.placeholder-img {
+  width: 100%;
+  margin: 0 auto 40px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  flex-direction: row;
+}
+
+.placeholder-img.single {
+  flex-direction: column;
+}
+
+.placeholder-img.single {
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+
+.placeholder-img.single img {
+  margin-bottom: 25px;
+}
+
+/* IMAGE DEFAULT */
+.placeholder-img img {
+  image-rendering: pixelated;
+}
+
+/* STORY TEXT BOX */
+#story-text-box {
+  background: #fff;
+  border: 4px solid #000;
+  box-shadow: 0 0 0 4px #000;
+  padding: 18px 20px;
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+
+/* STORY TEXT */
+#story-text {
+  color: black;
+  font-size: 14px;
+  line-height: 1.8;
+  margin-bottom: 0;
+  white-space: pre-wrap;
+  user-select: none;
+  min-height: 90px;
+}
+
+/* Inline icons inside story text */
+.story-icon {
+  width: 35px;          /* ← change this to make icons bigger/smaller */
+  height: 35px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+
+/* FIX: this MUST be outside the #story-text block */
+#story-text.compact {
+  min-height: 0;
+}
+
+/* BUTTON */
+#next-btn {
+  padding: 10px 20px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+  background-color: #333;
+  color: #fff;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+#next-btn:hover {
+  background-color: #555;
+  transform: scale(1.05);
+}
+
+.hidden-btn {
+  visibility: hidden;
+}
+
+/* ALARM BLOCK */
+#alarm-block {
+  width: 100%;
+  max-width: 560px;
+  margin: 18px auto 0 auto;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.alarm-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin: 12px 0;
+}
+
+.alarm-row img {
+  width: 26px;
+  height: 26px;
+  image-rendering: pixelated;
+}
+
+.alarm-text {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* TRANSITIONS */
+.fade-out { opacity: 0; }
+
+/* PROFILE SCREEN (unchanged) */
+#profile-screen {
+  display: none;
+  position: relative;
+
+  /* Fill almost the entire screen */
+  width: 100%;
+  height: 100%;
+
+  max-width: none;
+  max-height: none;
+
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+
+  background-image: url("investigative background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  border-radius: 14px;
+  box-shadow: 0 0 0 4px #000; /* thin dark border */
+  padding: 24px 32px;
+}
+
+
+#profile-screen.fade-in { opacity: 1; }
+
+#profile-title {
+  font-size: 14px;
+  margin-bottom: 0;
+  margin-top: 0;
+  color: #062b36;
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.9);
+  border: 4px solid #0b6f86;
+  box-shadow: 0 0 0 2px #063f4f;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin: 10px 0 10px;
+  padding-left: 14px;
+  gap: 12px;
+  align-items: center;
+}
+
+#profile-instructions {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 12px;
+  padding: 8px 14px;
+  background: #e7f6fb;
+  border: 4px solid #0b6f86;
+  box-shadow: 0 0 0 2px #063f4f;
+  color: #062b36;
+  cursor: pointer;
+}
+
+.instructions-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  align-items: center;
+  justify-content: center;
+  z-index: 6;
+}
+
+.instructions-overlay.active { display: flex; }
+
+.instructions-card {
+  width: 520px;
+  background: #e7f6fb;
+  border: 4px solid #0b6f86;
+  box-shadow: 0 0 0 2px #063f4f;
+  padding: 18px 20px;
+  color: #062b36;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.instructions-close {
+  margin-top: 12px;
+  padding: 8px 14px;
+  border: 4px solid #0b6f86;
+  background: #e7f6fb;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.profile-grid {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+
+  position: absolute;   /* ← THIS makes bottom positioning work */
+  bottom: 8%;           /* controls how high off the floor */
+  width: calc(100% - 64px);
+  left: 32px;
+}
+
+#profile-screen.profile-shift .profile-top,
+#profile-screen.profile-shift #profile-title,
+#profile-screen.profile-shift .profile-grid {
+  transform: translateX(10px);
+}
+
+
+.profile-card {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  background: none;
+  padding: 0;
+}
+
+
+.profile-card:hover {
+  transform: translateY(-6px) scale(1.06);
+  filter: brightness(1.08);
+}
+
+.profile-card:hover .profile-name {
+  text-shadow: 0 2px 0 #000, 0 0 10px rgba(255,255,255,0.35);
+}
+
+.profile-img {
+  height: 350px;
+  width: auto;
+  image-rendering: pixelated;
+}
+
+.profile-name {
+  font-size: 12px;
+  color: white;
+  margin-bottom: 6px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+/* FADE + MENU SCREEN */
+#fade-overlay {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  z-index: 5;
+}
+
+#fade-overlay.active { opacity: 1; }
+
+#menu-screen {
+  display: none;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
+    url("investigative background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 14px;
+  box-shadow: 0 0 0 4px #000;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  z-index: 4;
+  padding: 14px 24px 28px;
+}
+
+.menu-content {
+  transform: translate(10px, -10px);
+}
+
+#menu-screen.fade-in { opacity: 1; }
+
+.menu-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 4px solid #0b6f86;
+  box-shadow: 0 0 0 2px #063f4f;
+  padding: 10px 14px;
+  margin-bottom: 18px;
+  font-size: 18px;
+  background: rgba(255,255,255,0.9);
+  color: #062b36;
+}
+
+#menu-back {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 18px;
+  padding: 8px 12px;
+  background: #e7f6fb;
+  border: 4px solid #0b6f86;
+  box-shadow: 0 0 0 2px #063f4f;
+  cursor: pointer;
+}
+
+.menu-body {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  gap: 24px;
+  align-items: center;
+  max-width: 760px;
+  margin: 0 auto;
+  transform: translate(15px, 25px);
+}
+
+.menu-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 420px;
+}
+
+.menu-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+}
+
+.menu-option {
+  min-width: 220px;
+  text-align: center;
+  background: #e7f6fb;
+  border: 4px solid #0b6f86;
+  padding: 20px 12px;
+  box-shadow: 0 0 0 2px #063f4f;
+  font-family: 'VT323', monospace;
+  font-size: 28px;
+  text-transform: lowercase;
+  cursor: pointer;
+  color: #062b36;
+}
+
+.menu-option img {
+  width: 22px;
+  height: 22px;
+  image-rendering: pixelated;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.menu-log {
+  width: 520px;
+  border: 4px solid #0b6f86;
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 0 0 2px #063f4f;
+}
+
+.menu-log-title {
+  padding: 10px 12px;
+  border-bottom: 4px solid #0b6f86;
+  font-size: 18px;
+  text-align: left;
+  color: #062b36;
+}
+
+.menu-log-body {
+  padding: 14px;
+  font-size: 18px;
+  line-height: 1.8;
+  min-height: 160px;
+  white-space: pre-wrap;
+  color: #062b36;
+}
+
+.menu-right img {
+  max-height: 58vh;
+  width: auto;
+  image-rendering: pixelated;
+}
+
+.menu-right { display: flex; align-items: center; justify-content: center; padding: 0 16px; }
+
+.profile-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 4px solid #0b6f86;
+  box-shadow: 0 0 0 2px #063f4f;
+  padding: 10px 14px;
+  font-size: 18px;
+  background: rgba(255,255,255,0.9);
+  color: #062b36;
+}
+
+#points-popup {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  align-items: center;
+  justify-content: center;
+  z-index: 6;
+}
+
+#points-popup.active { display: flex; }
+
+.popup-box {
+  background: #e7f6fb;
+  border: 4px solid #0b6f86;
+  box-shadow: 0 0 0 2px #063f4f;
+  padding: 20px 18px;
+  width: 420px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+#popup-dismiss {
+  margin-top: 16px;
+  padding: 10px 14px;
+  border: 4px solid #0b6f86;
+  background: #e7f6fb;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+#mission-popup {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  align-items: center;
+  justify-content: center;
+  z-index: 7;
+}
+
+#mission-popup.active { display: flex; }
+
+.mission-box {
+  background: #e7f6fb;
+  border: 4px solid #0b6f86;
+  box-shadow: 0 0 0 2px #063f4f;
+  padding: 22px 20px;
+  width: 520px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.8;
+  color: #062b36;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.mission-title {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.mission-advisory {
+  width: 100%;
+  padding: 10px 10px;
+  border: 2px solid #b35c5c;
+  background: #f7dede;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #5a1d1d;
+}
+
+.mission-divider {
+  margin-top: 14px;
+  border-top: 2px solid #0b6f86;
+}
+
+.mission-btn {
+  margin-top: 6px;
+  padding: 10px 14px;
+  border: 4px solid #0b6f86;
+  background: #e7f6fb;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+#end-screen {
+  display: none;
+  text-align: center;
+  transform: translateY(20px);
+}
+
+#end-screen img {
+  max-width: 220px;
+  width: 70%;
+  image-rendering: pixelated;
+  margin-bottom: 16px;
+}
+
+#play-again {
+  margin-top: 16px;
+  padding: 10px 14px;
+  border: 4px solid #0b6f86;
+  background: #e7f6fb;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+
+</style>
+</head>
+
+<body>
+<audio id="bg-audio" class="bg-audio" autoplay loop>
+  <source src="No Copyright Music Playlist - 20 Minutes Lofi Hip Hop Mix.mp3" type="audio/mpeg">
+</audio>
+<audio id="ui-sound" class="bg-audio" preload="auto">
+  <source src="marimba-bloop-2-188149.mp3" type="audio/mpeg">
+</audio>
+<audio id="click-sound" class="bg-audio" preload="auto">
+  <source src="computer-mouse-click-02-383961.mp3" type="audio/mpeg">
+</audio>
+<audio id="trust-success-sound" class="bg-audio" preload="auto">
+  <source src="marimba-bloop-1-188150.mp3" type="audio/mpeg">
+</audio>
+<audio id="trust-fail-sound" class="bg-audio" preload="auto">
+  <source src="marimba-bloop-3-188151.mp3" type="audio/mpeg">
+</audio>
+
+<div id="container">
+<div id="scaled-root">
+<div id="intro-screen" class="intro-screen">
+  <div class="intro-card">
+    <div class="intro-burst"></div>
+    <div class="intro-burst right"></div>
+    <div class="intro-icons">
+      <img src="profileicon.png" alt="">
+      <img src="magnifyingglass.png" alt="">
+      <img src="questionmarkicon.png" alt="">
+      <img src="tickicon.png" alt="">
+    </div>
+    <div class="intro-content">
+      <div class="intro-title">Who Can You Trust?</div>
+      <div class="intro-subtitle">
+        Four accounts. One missing backpack. Spot the red flags and keep Milo safe.
+      </div>
+      <button id="intro-btn" class="intro-button">CLICK ME!</button>
+    </div>
+  </div>
+</div>
+
+<div id="story-container" style="display: none;">
+  <div class="placeholder-img" id="story-img">
+    <img id="scene-image" src="school.png">
+    <img id="scene-image-2" src="milofullbody.png">
+  </div>
+
+  <div id="story-text-box">
+    <div id="story-text"></div>
+    <div id="alarm-block">
+      <div class="alarm-row">
+        <img src="alarm.png">
+        <div class="alarm-text">
+          <span style="color:#f22f2c;">Impersonation</span> – People online can pretend to be someone they are not.
+        </div>
+      </div>
+
+      <div class="alarm-row">
+        <img src="alarm.png">
+        <div class="alarm-text">
+          <span style="color:#ff5521;">Image Abuse</span> – Photos shared "just to prove identity" can be misused or spread.
+        </div>
+      </div>
+
+      <div class="alarm-row">
+        <img src="alarm.png">
+        <div class="alarm-text">
+          <span style="color:#ff8800;">Online Grooming</span> – Strangers may build trust slowly to get personal information or meet offline.
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <button id="next-btn" class="hidden-btn">NEXT</button>
+</div>
+
+<div id="profile-screen" class="profile-shift">
+  <div class="profile-top">
+    <div>SELECT TARGET</div>
+    <div id="profile-points">POINTS: 10</div>
+  </div>
+  <div class="profile-actions">
+    <button id="profile-instructions">INSTRUCTIONS</button>
+    <div id="profile-title">Click a profile to explore!</div>
+  </div>
+
+  <div class="profile-grid">
+    <div class="profile-card" data-handle="@HelpfulAuntie" data-img="auntieprofile.png">
+      <img class="profile-img" src="helpfulauntie.png">
+      <div class="profile-name">@HelpfulAuntie</div>
+    </div>
+    <div class="profile-card" data-handle="@CafeStaff_Official" data-img="baristaprofile.png">
+      <img class="profile-img" src="barista.png">
+      <div class="profile-name">@CafeStaff_Official</div>
+    </div>
+    <div class="profile-card" data-handle="@LostAndFoundSG" data-img="lostandfoundprofile.png">
+      <img class="profile-img" src="lostandfoundgirl.png">
+      <div class="profile-name">@LostAndFoundSG</div>
+    </div>
+    <div class="profile-card" data-handle="@LibraryDesk" data-img="libraryprofile.png">
+      <img class="profile-img" src="librarianfullbody.png">
+      <div class="profile-name">@LibraryDesk</div>
+    </div>
+  </div>
+
+  <div id="instructions-overlay" class="instructions-overlay">
+    <div class="instructions-card">
+      For each profile, you can choose:
+      <br><br>
+      Check Profile<br>
+      Check History<br>
+      Ask One Question<br>
+      Trust
+      <br><br>
+      You may explore before choosing who Milo should meet.
+      You have a maximum of 10 action points.
+      <br>
+      <button class="instructions-close" id="instructions-close">CLOSE</button>
+    </div>
+  </div>
+</div>
+
+<div id="menu-screen">
+  <div class="menu-content">
+    <div class="menu-top">
+      <button id="menu-back">BACK</button>
+      <div id="menu-target">SELECT TARGET</div>
+      <div id="menu-points">POINTS: 10</div>
+    </div>
+    <div class="menu-body">
+      <div class="menu-center">
+        <div class="menu-options">
+          <button class="menu-option" data-action="profile"><img src="profileicon.png" alt="">profile</button>
+          <button class="menu-option" data-action="history"><img src="magnifyingglass.png" alt="">history</button>
+          <button class="menu-option" data-action="question"><img src="questionmarkicon.png" alt="">question</button>
+          <button class="menu-option" data-action="trust"><img src="tickicon.png" alt="">trust user</button>
+        </div>
+        <div class="menu-log">
+          <div class="menu-log-title">INVESTIGATION LOG</div>
+          <div class="menu-log-body" id="menu-log-body"></div>
+        </div>
+      </div>
+      <div class="menu-right">
+        <img id="menu-profile-img" src="" alt="">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="fade-overlay"></div>
+<div id="points-popup">
+  <div class="popup-box">
+    <div>Your investigation points have run out!</div>
+    <div>Select someone to trust.</div>
+    <button id="popup-dismiss">DISMISS</button>
+  </div>
+</div>
+
+<div id="mission-popup">
+  <div class="mission-box">
+    <div class="mission-title" id="mission-title"></div>
+    <div id="mission-body"></div>
+    <button class="mission-btn" id="mission-btn"></button>
+    <div class="mission-divider"></div>
+    <div class="mission-advisory">
+      <div>CYBER INVESTIGATOR TIP:</div>
+      <div id="mission-tip"></div>
+    </div>
+  </div>
+</div>
+
+<div id="end-screen">
+  <img src="happymilo.png" alt="Happy Milo">
+  <div>MILO HAS SAFELY RECOVERED HER BAG!</div>
+  <button id="play-again">PLAY AGAIN</button>
+</div>
+
+</div>
+</div>
+
+<script>
+const storyText = document.getElementById('story-text');
+const storyTextBox = document.getElementById('story-text-box');
+const nextBtn = document.getElementById('next-btn');
+const sceneImage = document.getElementById('scene-image');
+const sceneImage2 = document.getElementById('scene-image-2');
+const alarmBlock = document.getElementById('alarm-block');
+const storyContainer = document.getElementById('story-container');
+const profileScreen = document.getElementById('profile-screen');
+const storyImg = document.getElementById('story-img');
+const fadeOverlay = document.getElementById('fade-overlay');
+const menuScreen = document.getElementById('menu-screen');
+const menuProfileImg = document.getElementById('menu-profile-img');
+const menuLogBody = document.getElementById('menu-log-body');
+const menuBackBtn = document.getElementById('menu-back');
+const menuPoints = document.getElementById('menu-points');
+const menuTarget = document.getElementById('menu-target');
+const profilePoints = document.getElementById('profile-points');
+const menuOptions = document.querySelectorAll('.menu-option');
+const pointsPopup = document.getElementById('points-popup');
+const popupDismiss = document.getElementById('popup-dismiss');
+const profileCards = document.querySelectorAll('.profile-card');
+const bgAudio = document.getElementById('bg-audio');
+const uiSound = document.getElementById('ui-sound');
+const clickSound = document.getElementById('click-sound');
+const trustSuccessSound = document.getElementById('trust-success-sound');
+const trustFailSound = document.getElementById('trust-fail-sound');
+const missionPopup = document.getElementById('mission-popup');
+const missionTitle = document.getElementById('mission-title');
+const missionBody = document.getElementById('mission-body');
+const missionBtn = document.getElementById('mission-btn');
+const missionTip = document.getElementById('mission-tip');
+const endScreen = document.getElementById('end-screen');
+const playAgainBtn = document.getElementById('play-again');
+const introScreen = document.getElementById('intro-screen');
+const introBtn = document.getElementById('intro-btn');
+const container = document.getElementById('container');
+container.classList.add("intro-theme");
+const instructionsOverlay = document.getElementById('instructions-overlay');
+const instructionsBtn = document.getElementById('profile-instructions');
+const instructionsClose = document.getElementById('instructions-close');
+
+const storyLines = [
+  { img: ["school.png","milofullbody.png"], text: "Milo is a student who likes to post on her public social media account. One day, she accidentally leaves her backpack somewhere near school." },
+  { img: ["schoolbag.png"], text: "Inside the backpack:\nA notebook (with her name)\nA pencil case\nA keychain" },
+  { img: ["milopost.png"], text: "Later that evening, Milo realises the bag is missing. Instead of going back immediately, she posts on her public social media account." },
+  { img: ["4messages.png"], text: "Within minutes, four different accounts reply.\nSome sound helpful.\nSome sound friendly.\nSome sound too helpful." },
+
+  { img: ["sadmilofullbody.png"], text: "WHY DOES THIS MATTER?", showAlarm: true },
+
+  { img: ["sadmilofullbody.png"], text: "WHY LEARN THESE SKILLS?\n\nBecause online deception often looks kind, helpful, or normal.\nLearning how to check, verify, and pause helps keep Milo and you safe." },
+ {
+  img: [],
+  text: `
+For each profile, you can choose:
+
+<img src="profileicon.png" class="story-icon"> Check Profile
+<img src="magnifyingglass.png" class="story-icon"> Check History
+<img src="questionmarkicon.png" class="story-icon"> Ask One Question
+<img src="tickicon.png" class="story-icon"> Trust
+
+You may explore before choosing who Milo should meet.
+You have a maximum of 10 action points.
+`,
+  isBegin: true
+}
+
+
+];
+
+let lineIndex = 0;
+let typingSession = 0;
+const TYPE_INTERVAL = 24;
+const CHARS_PER_TICK = 1;
+let speedFactor = 1;
+let points = 10;
+let currentHandle = "";
+const usedActionsByHandle = {};
+const LOG_DELAY_MS = 2300;
+let logTimeoutId = null;
+
+const investigationLogs = {
+  "@HelpfulAuntie": {
+    profile:
+`Profile photo: Smiling woman
+Bio: “Just helping where I can.”
+Posts: 2 recent posts
+Followers: Very few`,
+    history:
+`Account created: 2 years ago
+Username changes: None
+Tagged by others: No
+Past activity: None`,
+    question:
+`Question: “Where did you find the backpack?”
+Reply: “Hi dear, near your area. I can bring it to you. No worries!”`
+  },
+  "@CafeStaff_Official": {
+    profile:
+`Profile photo: Café logo
+Bio: “Customer support”
+Link in bio: since 1969
+Posts: Inconsistent`,
+    history:
+`Account age: 10 months
+Username changes: 1 time
+Reports: Impersonation flagged once
+Past posts deleted: Yes`,
+    question:
+`Question: “Which café branch has the backpack?”
+Reply: “Our main outlet, it is locked in our backroom, come to the counter and meet our worker there. Looking forward to see you!”`
+  },
+  "@LibraryDesk": {
+    profile:
+`Profile photo: Library building
+Bio: “Official library service desk”
+Address listed: Yes
+Verified tick`,
+    history:
+`Account age: 4 years
+Username changes: None
+Tagged by public users: Yes
+Activity: Regular updates`,
+    question:
+`Question: “What’s inside the backpack?”
+Reply: “A notebook with your name and a keychain, if it is truly yours please bring your student card for verification. Thank you!”`
+  },
+  "@LostAndFoundSG": {
+    profile:
+`Profile photo: Generic lost-item icon
+Bio: “Helping return lost items”
+Posts: Mostly reposts
+Comments: Disabled`,
+    history:
+`Account age: 2 weeks
+Username changes: Once
+Previous ban: Yes`,
+    question:
+`Question: “Can I collect it through the counter?”
+Reply: “Yes, but It’s faster if we meet directly :)”`
+  }
+};
+
+if (bgAudio) {
+  bgAudio.volume = 0.35;
+  bgAudio.play().catch(() => {});
+  document.addEventListener("click", () => {
+    if (bgAudio.paused) {
+      bgAudio.play().catch(() => {});
+    }
+  }, { once: true });
+}
+
+function playSound(audio) {
+  if (!audio) return;
+  [uiSound, clickSound, trustSuccessSound, trustFailSound].forEach((snd) => {
+    if (!snd || snd === audio) return;
+    snd.pause();
+    snd.currentTime = 0;
+  });
+  audio.currentTime = 0;
+  audio.play().catch(() => {});
+}
+
+function updatePointsDisplay() {
+  menuPoints.textContent = `POINTS: ${points}`;
+  profilePoints.textContent = `POINTS: ${points}`;
+}
+
+function loadLogWithDelay(text) {
+  if (logTimeoutId) {
+    clearTimeout(logTimeoutId);
+  }
+  menuLogBody.textContent = "Loading...";
+  logTimeoutId = setTimeout(() => {
+    menuLogBody.textContent = text;
+  }, LOG_DELAY_MS);
+}
+
+function appendNextChunk(text, index) {
+  if (text.charAt(index) === "<") {
+    const endTag = text.indexOf(">", index);
+    if (endTag !== -1) {
+      return { chunk: text.slice(index, endTag + 1), next: endTag + 1 };
+    }
+  }
+  return { chunk: text.charAt(index), next: index + 1 };
+}
+
+function typeWriter(text, sessionId, onDone, onProgress) {
+  let i = 0;
+  let last = 0;
+
+  function tick(ts) {
+    if (sessionId !== typingSession) return;
+    if (!last) last = ts;
+
+    if (ts - last >= TYPE_INTERVAL * speedFactor) {
+      let steps = CHARS_PER_TICK;
+      while (steps > 0 && i < text.length) {
+        const { chunk, next } = appendNextChunk(text, i);
+        storyText.innerHTML += chunk;
+        i = next;
+        steps--;
+      }
+      last = ts;
+    }
+
+    if (onProgress) {
+      onProgress(i / text.length);
+    }
+
+    if (i < text.length) {
+      requestAnimationFrame(tick);
+    } else {
+      nextBtn.classList.remove("hidden-btn");
+      if (onDone) onDone();
+    }
+  }
+
+  requestAnimationFrame(tick);
+}
+
+function showLine(index) {
+  const line = storyLines[index];
+  typingSession++;
+  nextBtn.classList.add("hidden-btn");
+  speedFactor = 1;
+
+  if (line.showAlarm) {
+    alarmBlock.style.display = "block";
+    alarmBlock.style.opacity = "0";
+    requestAnimationFrame(() => {
+      alarmBlock.style.opacity = "1";
+    });
+  } else {
+    alarmBlock.style.opacity = "0";
+    alarmBlock.style.display = "none";
+  }
+  nextBtn.textContent = line.isBegin ? "BEGIN!" : "NEXT";
+
+  sceneImage.style.display = "none";
+  sceneImage2.style.display = "none";
+  storyImg.classList.remove("single");
+
+  if (line.img.length === 1) {
+    storyImg.classList.add("single");
+    sceneImage.src = line.img[0];
+    sceneImage.style.display = "block";
+
+    if (line.img[0].includes("post") || line.img[0].includes("messages")) {
+      sceneImage.style.maxHeight = "300px";
+    } else if (line.img[0].includes("sad")) {
+      sceneImage.style.maxHeight = "260px";
+    } else {
+      sceneImage.style.maxHeight = "240px";
+    }
+  }
+
+  if (line.img.length === 2) {
+    sceneImage.src = line.img[0];
+    sceneImage.style.display = "block";
+    sceneImage.style.maxHeight = "220px";
+
+    sceneImage2.src = line.img[1];
+    sceneImage2.style.display = "block";
+    sceneImage2.style.maxHeight = "220px";
+  }
+
+  storyText.innerHTML = "";
+  storyText.style.textAlign = "center";
+
+  const beginIndex = storyLines.findIndex((item) => item.isBegin);
+  const isPreBegin = index < beginIndex;
+  storyTextBox.style.clipPath = "none";
+
+  /* Remove the big reserved space ONLY for the header alarm page */
+  if (line.showAlarm && line.text.trim() === "WHY DOES THIS MATTER?") {
+    storyText.classList.add("compact");
+  } else {
+    storyText.classList.remove("compact");
+  }
+
+  if (line.text.includes("<img")) {
+    storyText.innerHTML = line.text;
+    nextBtn.classList.remove("hidden-btn");
+  } else {
+    typeWriter(line.text, typingSession);
+  }
+}
+
+function startStory() {
+  container.classList.add("intro-theme");
+  storyContainer.style.display = "block";
+  introScreen.style.display = "none";
+  showLine(lineIndex);
+  lineIndex++;
+}
+
+setTimeout(() => {
+  introBtn.classList.add("show");
+}, 3000);
+
+introBtn.addEventListener("click", () => {
+  playSound(clickSound);
+  startStory();
+});
+
+nextBtn.addEventListener("click", () => {
+  const beginIndex = storyLines.findIndex((line) => line.isBegin);
+  const currentIndex = lineIndex - 1;
+  if (currentIndex < beginIndex) {
+    playSound(clickSound);
+  } else {
+    playSound(uiSound);
+  }
+  if (lineIndex < storyLines.length) {
+    showLine(lineIndex);
+    lineIndex++;
+  } else {
+    storyContainer.classList.add("fade-out");
+    setTimeout(() => {
+      storyContainer.style.display = "none";
+      container.classList.remove("intro-theme");
+      profileScreen.style.display = "block";
+      requestAnimationFrame(() => profileScreen.classList.add("fade-in"));
+    }, 600);
+  }
+});
+
+storyTextBox.addEventListener("click", (event) => {
+  event.stopPropagation();
+  playSound(clickSound);
+  speedFactor = 0.4;
+});
+
+document.addEventListener("click", (event) => {
+  if (event.target.closest("button")) return;
+  if (storyContainer.style.display === "none") return;
+  playSound(clickSound);
+  speedFactor = 0.4;
+});
+
+function openMenu(handle, img) {
+  fadeOverlay.classList.add("active");
+  setTimeout(() => {
+    profileScreen.classList.remove("fade-in");
+    profileScreen.style.display = "none";
+    currentHandle = handle;
+    menuProfileImg.src = img;
+    menuProfileImg.alt = handle;
+    menuTarget.textContent = `SELECT TARGET: ${handle}`;
+    updatePointsDisplay();
+    menuLogBody.textContent = `analyzing ${handle}... Choose an investigation tool above!`;
+    menuScreen.style.display = "block";
+    requestAnimationFrame(() => menuScreen.classList.add("fade-in"));
+    fadeOverlay.classList.remove("active");
+  }, 500);
+}
+
+function closeMenu() {
+  fadeOverlay.classList.add("active");
+  menuScreen.classList.remove("fade-in");
+  setTimeout(() => {
+    menuScreen.style.display = "none";
+    profileScreen.style.display = "block";
+    requestAnimationFrame(() => profileScreen.classList.add("fade-in"));
+    fadeOverlay.classList.remove("active");
+  }, 500);
+}
+
+profileCards.forEach((card) => {
+  card.addEventListener("click", () => {
+    playSound(uiSound);
+    openMenu(card.dataset.handle, card.dataset.img);
+  });
+});
+
+instructionsBtn.addEventListener("click", () => {
+  playSound(uiSound);
+  instructionsOverlay.classList.add("active");
+});
+
+instructionsClose.addEventListener("click", () => {
+  playSound(uiSound);
+  instructionsOverlay.classList.remove("active");
+});
+
+menuBackBtn.addEventListener("click", () => {
+  playSound(clickSound);
+  closeMenu();
+});
+
+popupDismiss.addEventListener("click", () => {
+  playSound(uiSound);
+  pointsPopup.classList.remove("active");
+});
+
+menuOptions.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const action = btn.dataset.action;
+    if (action === "trust") {
+      const isLibrary = currentHandle === "@LibraryDesk";
+      playSound(isLibrary ? trustSuccessSound : trustFailSound);
+      missionPopup.classList.add("active");
+      if (isLibrary) {
+        missionTitle.textContent = "MISSION SUCCESS!";
+        missionBody.textContent = "You trusted @LibraryDesk. GREAT JOB! The account verified details and used a public counter. You trusted the right person and kept Milo safe.";
+        missionTip.textContent = "Safe helpers welcome verification and public meetups.";
+        missionBtn.textContent = "DISMISS";
+      } else {
+        missionTitle.textContent = "MISSION FAILURE";
+        if (currentHandle === "@HelpfulAuntie") {
+          missionBody.textContent = "You trusted @HelpfulAuntie. Friendly words hid vague details and no safe handover.";
+          missionTip.textContent = "Kindness isn’t proof. Always ask for clear locations and verification.";
+        } else if (currentHandle === "@CafeStaff_Official") {
+          missionBody.textContent = "You trusted @CafeStaff_Official. The account looked official but had impersonation risks.";
+          missionTip.textContent = "Logos can be copied. Verify through real websites or counters.";
+        } else {
+          missionBody.textContent = "You trusted @LostAndFoundSG. A new account pushed for private meetings and images.";
+          missionTip.textContent = "Never meet privately or share photos with strangers.";
+        }
+        missionBtn.textContent = "PLAY AGAIN";
+      }
+      return;
+    }
+
+    playSound(uiSound);
+    if (!usedActionsByHandle[currentHandle]) {
+      usedActionsByHandle[currentHandle] = { profile: false, history: false, question: false };
+    }
+
+    const alreadyUsed = usedActionsByHandle[currentHandle][action];
+    if (!alreadyUsed) {
+      if (points === 0) {
+        pointsPopup.classList.add("active");
+        return;
+      }
+      points -= 1;
+      usedActionsByHandle[currentHandle][action] = true;
+      updatePointsDisplay();
+      if (points === 0) {
+        pointsPopup.classList.add("active");
+      }
+    }
+
+    const logText = investigationLogs[currentHandle]?.[action] || `analyzing ${currentHandle}... Choose an investigation tool above!`;
+    loadLogWithDelay(logText);
+  });
+});
+
+missionBtn.addEventListener("click", () => {
+  playSound(uiSound);
+  const isSuccess = missionTitle.textContent.startsWith("MISSION SUCCESS");
+  missionPopup.classList.remove("active");
+  if (isSuccess) {
+    menuScreen.style.display = "none";
+    container.classList.add("intro-theme");
+    endScreen.style.display = "block";
+  } else {
+    menuScreen.style.display = "none";
+    profileScreen.style.display = "block";
+    requestAnimationFrame(() => profileScreen.classList.add("fade-in"));
+  }
+});
+
+playAgainBtn.addEventListener("click", () => {
+  playSound(uiSound);
+  window.location.reload();
+});
+</script>
+
+</body>
+</html>
